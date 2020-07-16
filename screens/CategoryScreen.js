@@ -1,8 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import {
+    View,
+    Text,
+    StyleSheet,
+    FlatList,
+    ActivityIndicator,
+} from "react-native";
 import RecipeListItem from "../components/RecipeListItem";
 import useFetch from "../hooks/useFetch";
 import Colors from "../constants/Colors";
+import { useSelector } from "react-redux";
 
 const recipes = [
     {
@@ -69,59 +76,76 @@ const recipes = [
 ];
 
 const CategoryScreen = ({ route, navigation }) => {
-    // const [loadedRecipes, setloadedRecipes] = useState(recipes);
-    const { type } = route.params;
-    const [ response, loading, hasError ] = useFetch(
-        `https://api.spoonacular.com/recipes/complexSearch?type=${type}&apiKey=d70dd48fb9594c368441a541932d65b1`,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }
-    );
-    // const fetchRecipes = useCallback(() => {
-    //     fetch(
-    //         `https://api.spoonacular.com/recipes/complexSearch?type=${type}&apiKey=d70dd48fb9594c368441a541932d65b1`,
-    //         {
-    //             method: "GET",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //         }
-    //     )
-    //         .then((data) => {
-    //             // console.log('Data', data);
-    //             return data.json();
-    //         })
-    //         .then((results) => {
-    //             // console.log("There are the results of this.", results);
-    //             setloadedRecipes(results.results);
-    //         })
-    //         .catch((err) => console.log("This is the error", err));
-    // }, [type]);
+    const { searchQuery } = route.params;
+    const globalFilters = useSelector(state => state.filters);
 
-    // useEffect(() => {
-    //     fetchRecipes();
-    // }, [fetchRecipes]);
-    if (loading) {
+    const typeParam = globalFilters.category[0] || '';
+    const dietParam = globalFilters.diet[0] || '';
+    const intoleranceParam = globalFilters.diet[0] || '';
+    const cuisineParam = globalFilters.cuisine.join(',') || '';
+
+    console.log(`These are the params: 
+        typeParam --- ${typeParam},
+        dietParam --- ${dietParam},
+        intoleranceParam --- ${intoleranceParam},
+        cuisineParam --- ${cuisineParam}
+    `);
+
+    const [fetchNumber, setFetchNumber] = useState(10);
+    const [initialLoad, setInitialLoad] = useState(false);
+    const [urlString, setUrlString] = useState(
+        `https://api.spoonacular.com/recipes/complexSearch?query=${searchQuery}&type=${typeParam}&diet=${dietParam}&cuisine=${cuisineParam}&intolerances=${intoleranceParam}&number=${fetchNumber}&instructionsRequired=true&apiKey=d70dd48fb9594c368441a541932d65b1`
+    );
+    
+    const [response, loading, hasError] = useFetch(urlString, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    useEffect(() => {
+        setUrlString(
+            `https://api.spoonacular.com/recipes/complexSearch?query=${searchQuery}&type=${typeParam}&diet=${dietParam}&cuisine=${cuisineParam}&intolerances=${intoleranceParam}&number=${fetchNumber}&instructionsRequired=true&apiKey=d70dd48fb9594c368441a541932d65b1`
+        );
+    }, [fetchNumber]);
+
+    const fetchMoreHandler = () => {
+        setInitialLoad(true);
+        setFetchNumber(fetchNumber + 10);
+    };
+
+    if (loading && !initialLoad) {
         return (
-        <View style={styles.screen}>
-            <ActivityIndicator size="large" color={Colors.secondaryColor} />
-        </View>
-        )
+            <View style={styles.screen}>
+                <ActivityIndicator size="large" color={Colors.secondaryColor} />
+            </View>
+        );
     }
 
     return (
         <View style={styles.screen}>
             {response && (
                 <FlatList
+                    style={styles.flatlist}
                     data={response.results}
                     keyExtractor={(item) => item.id}
-                    numColumns={2}
-                    columnWrapperStyle={styles.list}
-                    renderItem={(item) => <RecipeListItem navigation={navigation} recipe={item.item} />}
+                    numColumns={1}
+                    renderItem={(item) => (
+                        <RecipeListItem
+                            navigation={navigation}
+                            recipe={item.item}
+                        />
+                    )}
+                    onEndReached={fetchMoreHandler}
+                    onEndReachedThreshold={0.05}
                 />
+            )}
+            {(initialLoad && loading) && (
+                <View style={styles.bottomLoading}>
+                    <ActivityIndicator size="large" color={Colors.secondaryColor} />
+                </View>
+
             )}
         </View>
     );
@@ -133,6 +157,7 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: Colors.white
     },
     listContainer: {
         width: "100%",
@@ -140,6 +165,17 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
+    bottomLoading: {
+        paddingVertical: 5,
+        display: 'flex',
+        backgroundColor: '#333',
+        width: '100%'
+    },
+    flatlist: {
+        backgroundColor: 'rgb(254, 254, 254)',
+        width: "100%",
+        paddingHorizontal: 10
+    }
 });
 
 export default CategoryScreen;
