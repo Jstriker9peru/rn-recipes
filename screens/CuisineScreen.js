@@ -13,7 +13,7 @@ import { cuisines } from '../data/data';
 const CuisineScreen = ({ navigation }) => {
     const selectHandler = (category) => {
         const { title, cuisine } = category;
-        navigation.navigate("Category", { query: { title, type: '', cuisine, searchQuery: '' } });
+        navigation.navigate("Search Results", { query: { title, type: '', cuisine, searchQuery: '' } });
     };
     return (
         <View style={styles.screen}>

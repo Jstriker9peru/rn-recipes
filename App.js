@@ -7,7 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Colors from "./constants/Colors";
 
 import RecipeScreen from "./screens/RecipeScreen";
-import CategoryScreen from "./screens/CategoryScreen";
+import SearchResultsScreen from "./screens/SearchResultsScreen";
 import FiltersScreen from "./screens/FiltersScreen";
 import NewRecipeTabScreen from "./screens/NewRecipeTabScreen";
 
@@ -17,6 +17,8 @@ import { useFonts } from '@use-expo/font';
 import { Provider } from "react-redux";
 import { createStore, combineReducers } from "redux";
 import { filtersReducer } from "./store/reducers/filters-reducer";
+import RecipeScreen2 from "./screens/RecipeScreen2";
+import AuthScreen from "./screens/AuthScreen";
 
 const rootReducer = combineReducers({
     filters: filtersReducer,
@@ -57,15 +59,16 @@ export default function App() {
         <Provider store={store}>
                 <NavigationContainer>
                     <Stack.Navigator screenOptions={defaultStackNavOptions}>
-                        {/* <Stack.Screen name="Recipe" component={NewRecipeTabScreen} /> */}
+                        <Stack.Screen name="Auth" component={AuthScreen} />
                         <Stack.Screen name="Home" component={HomeScreen} />
                         <Stack.Screen name="Filters" component={FiltersScreen} />
                         <Stack.Screen
-                            name="Category"
-                            component={CategoryScreen}
+                            name="Search Results"
+                            component={SearchResultsScreen}
                             options={({ route }) => ({ title: route.params.title })}
                         />
-                        <Stack.Screen name="Recipe" component={RecipeScreen} />
+                        <Stack.Screen name="Recipe" component={RecipeScreen2} />
+                        {/* <Stack.Screen name="Recipe" component={RecipeScreen} /> */}
                     </Stack.Navigator>
                 </NavigationContainer>
         </Provider>

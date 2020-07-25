@@ -11,7 +11,6 @@ const OverviewDetails = ({ data }) => {
     const { title, prepTime, cookTime, source, caloricBreakdown } = data;
     console.log('this is title', title);
     return (
-        <ScrollView style={{ width: "80%", marginTop: 15 }}>
             <View style={styles.moreContainer}>
                 <View style={styles.titleRow}>
                     <Text style={styles.text}>
@@ -44,7 +43,6 @@ const OverviewDetails = ({ data }) => {
                     <Text style={styles.text}>{caloricBreakdown.percentFat || 'N/A '}%</Text>
                 </View>
             </View>
-        </ScrollView>
     );
 };
 
@@ -56,6 +54,7 @@ const styles = StyleSheet.create({
         width: "100%",
         marginTop: 15,
         paddingLeft: 10,
+        // backgroundColor: Colors.black,
     },
     titleRow: {
         display: 'flex',
@@ -74,7 +73,9 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'barlow-light',
-        fontSize: 14
+        fontSize: 18,
+        // color: Colors.white
+
     },
     color: {
         color: 'orange'

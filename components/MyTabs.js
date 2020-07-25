@@ -1,13 +1,14 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { FontAwesome, MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons, MaterialIcons, AntDesign } from "@expo/vector-icons";
 
 import SearchScreen from "../screens/SearchScreen";
 import CuisineScreen from "../screens/CuisineScreen";
 import MealTypeScreen from "../screens/MealTypeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import FiltersScreen from "../screens/FiltersScreen";
+import FrontScreen from "../screens/FrontScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -40,6 +41,15 @@ const MyTabs = () => {
                     ),
                 }}
             /> */}
+            <Tab.Screen
+                name="Browse"
+                component={FrontScreen}
+                options={{
+                    tabBarIcon: () => (
+                        <FontAwesome name="home" size={25} color="black" />
+                    )
+                }}
+            />
             <Tab.Screen
                 name="Search"
                 component={SearchScreen}

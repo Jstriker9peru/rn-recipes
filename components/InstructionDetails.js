@@ -1,16 +1,11 @@
 import React from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Colors from "../constants/Colors";
 
 const InstructionDetails = ({ data }) => {
     return (
-        <ScrollView style={{ width: "80%", marginTop: 15 }}>
-            {data ?
+        <View style={{ width: "100%", height: "auto" }}>
+            {data ? (
                 data.map(({ number, step }, index) => (
                     <View key={index} style={styles.instructions}>
                         <Text style={{ ...styles.text, ...styles.color }}>
@@ -18,12 +13,13 @@ const InstructionDetails = ({ data }) => {
                         </Text>
                         <Text style={styles.text}>{step}</Text>
                     </View>
-                )) : (
-                    <View style={styles.instructions}>
-                        <Text>There were no instructions found.</Text>
-                    </View>
-                )}
-        </ScrollView>
+                ))
+            ) : (
+                <View style={styles.instructions}>
+                    <Text>There were no instructions found.</Text>
+                </View>
+            )}
+        </View>
     );
 };
 
@@ -36,7 +32,7 @@ const styles = StyleSheet.create({
         marginVertical: 12,
         width: "100%",
         paddingLeft: 10,
-        paddingRight: 30
+        paddingRight: 30,
     },
     loading: {
         display: "flex",
@@ -44,8 +40,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     text: {
-        fontFamily: 'barlow-light',
-        fontSize: 14,
+        fontFamily: "barlow-light",
+        fontSize: 18,
+        // lineHeight: 20
     },
     color: {
         color: "orange",

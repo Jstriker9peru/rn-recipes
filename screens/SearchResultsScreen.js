@@ -75,26 +75,28 @@ const recipes = [
     },
 ];
 
-const CategoryScreen = ({ route, navigation }) => {
+const SearchResultsScreen = ({ route, navigation }) => {
     const { searchQuery } = route.params;
     const globalFilters = useSelector(state => state.filters);
 
-    const typeParam = globalFilters.category[0] || '';
-    const dietParam = globalFilters.diet[0] || '';
+    const typeParam = route.params.type || globalFilters.category[0] || '';
+    const dietParam = route.params.diet || globalFilters.diet[0] || '';
     const intoleranceParam = globalFilters.diet[0] || '';
-    const cuisineParam = globalFilters.cuisine.join(',') || '';
+    const cuisineParam = route.params.cuisine || globalFilters.cuisine.join(',') || '';
+    const sortParam = route.params.sort || '';
 
     console.log(`These are the params: 
         typeParam --- ${typeParam},
         dietParam --- ${dietParam},
         intoleranceParam --- ${intoleranceParam},
-        cuisineParam --- ${cuisineParam}
+        cuisineParam --- ${cuisineParam},
+        sortParam --- ${sortParam}
     `);
 
     const [fetchNumber, setFetchNumber] = useState(10);
     const [initialLoad, setInitialLoad] = useState(false);
     const [urlString, setUrlString] = useState(
-        `https://api.spoonacular.com/recipes/complexSearch?query=${searchQuery}&type=${typeParam}&diet=${dietParam}&cuisine=${cuisineParam}&intolerances=${intoleranceParam}&number=${fetchNumber}&instructionsRequired=true&apiKey=d70dd48fb9594c368441a541932d65b1`
+        `https://api.spoonacular.com/recipes/complexSearch?query=${searchQuery}&type=${typeParam}&diet=${dietParam}&cuisine=${cuisineParam}&intolerances=${intoleranceParam}&number=${fetchNumber}&sort=${sortParam}&instructionsRequired=true&apiKey=d70dd48fb9594c368441a541932d65b1`
     );
     
     const [response, loading, hasError] = useFetch(urlString, {
@@ -106,7 +108,7 @@ const CategoryScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         setUrlString(
-            `https://api.spoonacular.com/recipes/complexSearch?query=${searchQuery}&type=${typeParam}&diet=${dietParam}&cuisine=${cuisineParam}&intolerances=${intoleranceParam}&number=${fetchNumber}&instructionsRequired=true&apiKey=d70dd48fb9594c368441a541932d65b1`
+            `https://api.spoonacular.com/recipes/complexSearch?query=${searchQuery}&type=${typeParam}&diet=${dietParam}&cuisine=${cuisineParam}&intolerances=${intoleranceParam}&number=${fetchNumber}&sort=${sortParam}&instructionsRequired=true&apiKey=d70dd48fb9594c368441a541932d65b1`
         );
     }, [fetchNumber]);
 
@@ -125,7 +127,7 @@ const CategoryScreen = ({ route, navigation }) => {
 
     return (
         <View style={styles.screen}>
-            {response && (
+            {(response && response.results) ? (
                 <FlatList
                     style={styles.flatlist}
                     data={response.results}
@@ -140,6 +142,10 @@ const CategoryScreen = ({ route, navigation }) => {
                     onEndReached={fetchMoreHandler}
                     onEndReachedThreshold={0.05}
                 />
+            ) : (
+                <View>
+                    <Text>No recipes were found!</Text>
+                </View>
             )}
             {(initialLoad && loading) && (
                 <View style={styles.bottomLoading}>
@@ -157,7 +163,8 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: Colors.white
+        backgroundColor: Colors.white,
+        paddingVertical: 5
     },
     listContainer: {
         width: "100%",
@@ -178,4 +185,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CategoryScreen;
+export default SearchResultsScreen;

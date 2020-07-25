@@ -4,7 +4,7 @@ import Colors from "../constants/Colors";
 
 const IngredientDetails = ({ data }) => {
     return (
-        <ScrollView style={{ width: "80%", marginTop: 15 }}>
+        <View>
             {data ?
                 data.map(({ original }, index) => (
                     <View key={index} style={styles.ingredients}>
@@ -18,7 +18,7 @@ const IngredientDetails = ({ data }) => {
                         <Text>There were no ingredients found.</Text>
                     </View>
                 )}
-        </ScrollView>
+        </View>
     );
 };
 
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'barlow-light',
-        fontSize: 14,
+        fontSize: 18,
         marginRight: 5,
     },
 });

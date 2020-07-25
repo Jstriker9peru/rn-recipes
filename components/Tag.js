@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-const CategoryScreen = ({ tagInfo, type, add, remove, filters }) => {
+const Tag = ({ tagInfo, type, add, remove, filters }) => {
     let isHighlighted = filters[type].some(name => tagInfo.param === name);
 
     useEffect(() => {
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CategoryScreen;
+export default Tag;

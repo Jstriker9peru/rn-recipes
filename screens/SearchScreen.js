@@ -7,7 +7,7 @@ const SearchScreen = ({ navigation }) => {
     const [searchQuery, setsearchQuery] = useState('');
 
     const onPressHandler = (searchQuery) => {
-        navigation.navigate("Category", { searchQuery });
+        navigation.navigate("Search Results", { searchQuery });
     };
     return (
         <View style={styles.screen}>

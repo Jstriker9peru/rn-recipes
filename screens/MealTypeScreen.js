@@ -13,7 +13,7 @@ import { categories } from "../data/data";
 const MealTypeScreen = ({ navigation }) => {
     const selectHandler = (category) => {
         const { title, type } = category;
-        navigation.navigate("Category", { query: { title, type, cuisine: '', searchQuery: '' } });
+        navigation.navigate("Search Results", { query: { title, type, cuisine: '', searchQuery: '' } });
     };
 
     return (

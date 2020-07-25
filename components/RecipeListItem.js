@@ -4,6 +4,7 @@ import { Screen } from 'react-native-screens';
 import RecipeThumbnail from './RecipeThumbnail';
 import CustomRow from './CustomRow';
 import Colors from '../constants/Colors';
+import { useNavigation } from '@react-navigation/native';
 
 // const RecipeListItem = ({ recipe, navigation }) => {
 //     let { id, title, image } = recipe;
@@ -25,9 +26,9 @@ import Colors from '../constants/Colors';
 //     )
 // }
 
-const RecipeListItem = ({ recipe, navigation }) => {
+const RecipeListItem = ({ recipe }) => {
     let { id, title, image } = recipe;
-
+    let navigation = useNavigation();
     const selectHandler = () => {
         navigation.navigate("Recipe", { recipeId: id });
     }
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'barlow-medium',
-        marginVertical: 10,
+        marginBottom: 10,
         fontSize: 17,
         // paddingHorizontal: 10,
         // paddingVertical: 5,
